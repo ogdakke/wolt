@@ -91,8 +91,10 @@
   font: var(--font-mono);
   max-width: -moz-fit-content;
   max-width: fit-content;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.75rem;
   margin-top: 1rem;
+
+  
 
   background-color: rgba(var(--callout-rgb), 0.75);
   border-radius: var(--border-radius);
