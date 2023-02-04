@@ -39,11 +39,23 @@
   font-family: var(--font-mono);
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.LabelRoot {
+  display: flex;
+  gap: 0.25rem;
+  flex-direction: column;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
+  grid-template-columns: 1fr;
   width: var(--max-width);
-  max-width: 100%;
+  max-width: 60%;
 }
 
 .card {
@@ -232,7 +244,7 @@
       rgba(var(--callout-rgb), 0.5)
     );
     background-clip: padding-box;
-    backdrop-filter: blur(24px);
+    /* backdrop-filter: blur(24px); */
   }
 
   .description div {
