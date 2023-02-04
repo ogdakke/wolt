@@ -40,8 +40,9 @@
   
 }
 
-.heading {
-  
+.header {
+  display: flex;
+  gap: 1rem;
 }
 
 
@@ -209,8 +210,17 @@
   .main {
     justify-content: left;
     align-items: left;
+
+    padding-top: 1.5rem;
+
+    padding-bottom: 8rem;
   }
   
+  .header {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
   .content {
     padding: 4rem;
   }
