@@ -100,9 +100,15 @@
   border-radius: var(--border-radius);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
 }
+
 .inputButton:hover {
   background-color: rgba(var(--background-start-rgb), 1)
 }
+
+.inputButton input[type=submit] {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  }
 
 .inputWrapper {
   display: flex;
