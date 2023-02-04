@@ -1,9 +1,12 @@
 import { Inter, Noto_Sans_Wancho } from '@next/font/google'
 import styles from "@/styles/Home.module.css"
-import {useForm, SubmitHandler} from 'react-hook-form'
-import React, { useState, useEffect } from 'react'
+import {useForm, SubmitHandler, Control} from 'react-hook-form'
+import React, { useState} from 'react'
 import * as Label from '@radix-ui/react-label'
 import { isFriday, parseISO } from 'date-fns'
+
+const inter = Inter({ subsets: ['latin'] })
+
 
 const FormComponent: React.FC = () => {
   const [time, setTime] = useState(String)
@@ -19,7 +22,7 @@ const FormComponent: React.FC = () => {
     date: string
     time: Date
   }
-const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
+
 
 const calculateDeliveryFee = (data: Inputs) => {
   const SaveData = (data: Inputs) => {
@@ -96,68 +99,89 @@ const calculateDeliveryFee = (data: Inputs) => {
 // Here we get the current time and date for the ui on initial load. It gets overriden by the user inputting something else
 // Date in yyyy-mm-dd format to match default "date" input format.
 const dateNow = date.toISOString().slice(0,10)
-// Time in hours and minutes. Since getMinutes returns digits <= 9 as 0, 1, 2 ... and not 00, 01, 02, ... we need to pad with "0" to length 2.
-const hours = date.getHours()
+// Time in hours and minutes. Since getHours & getMinutes return digits <= 9 as 0, 1, 2 ... and not 00, 01, 02, ... we need to pad with "0" to length 2.
+const hours = date.getHours().toString().padStart(2, '0')
 const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
+
+const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
 
 // On submit, call the calculateDeliveryFee function.
 const onSubmit: SubmitHandler<Inputs> = (data: Inputs) =>{
   calculateDeliveryFee(data)
 } 
 return (
+  <>
   <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-    <Label.Root className={styles.LabelRoot}  htmlFor="cartValue">
-    Cart Value
-    </Label.Root>
-      <input 
+    <div className={styles.inputWrapper}>
+      <Label.Root className={styles.LabelRoot}  htmlFor="cartValue">
+      Cart Value
+      </Label.Root>
+      <input  className={inter.className}
       aria-label='cartValue'
+      placeholder='eg. 10.50'
       type="number"
       step={0.01}
-      {...register("cartValue", {required: true})}/>
 
-    {/* include validation with required or other standard HTML validation rules */}
-    <Label.Root className={styles.LabelRoot} htmlFor="deliveryDistance">
+      {...register("cartValue", {required: true})}/>
+      {errors.cartValue && <span>This field is required</span>}
+    </div>
+
+    <div className={styles.inputWrapper}>
+      <Label.Root className={styles.LabelRoot} htmlFor="deliveryDistance">
       Delivery distance in meters
       </Label.Root>
-      <input 
+      <input  className={inter.className}
       aria-label='deliveryDistance'
       type="number"
       placeholder='for example: 1203'
       {...register("deliveryDistance", { required: true, min: 1 })} />
-    
+      {errors.deliveryDistance && <span>Enter distance of delivery</span>}
+    </div>
     {/* errors will return when field validation fails  */}
-    {errors.deliveryDistance && <span>This field is required</span>}
-    <Label.Root className={styles.LabelRoot} htmlFor="numberOfItems">
+
+    <div className={styles.inputWrapper}>
+      <Label.Root className={styles.LabelRoot} htmlFor="numberOfItems">
       Number of items
       </Label.Root>
-      <input
+      <input className={inter.className}
       aria-label='numberOfItems'
       type="number"
       placeholder='Number of items' 
       {...register("numberOfItems", {required: true, min: 1})} />
-    
-    <Label.Root className={styles.LabelRoot} htmlFor="dateInput">
-    Enter Date. Default is today
-    </Label.Root>
-    <input
-    aria-label='dateInput'
-    type="date"    
-    defaultValue={dateNow}
-    {...register("date")} />
+      {errors.numberOfItems && <span>Input a whole number of items.</span>}
+    </div>
 
-    <Label.Root className={styles.LabelRoot} htmlFor="timeInput">
-      Time of order
+    <div className={styles.inputWrapper}>
+      <Label.Root className={styles.LabelRoot} htmlFor="dateInput">
+      Enter Date. Default is today
       </Label.Root>
-    <input
-    aria-label='timeInput'
-    type="time"    
-    defaultValue={timeNow}
-    {...register("time")} />
+      <input className={inter.className}
+      aria-label='dateInput'
+      type="date"    
+      defaultValue={dateNow}
+      {...register("date")} />
+      {errors.date && <span>Input a valid date.</span>}
+    </div>
+
+    <div className={styles.inputWrapper}>
+      <Label.Root className={styles.LabelRoot} htmlFor="timeInput">
+        Time of order
+        </Label.Root>
+      <input className={inter.className}
+      aria-label='timeInput'
+      type="time"    
+      defaultValue={timeNow}
+      {...register("time")} />
+      {errors.time && <span>Input a delivery time.</span>}
+    </div>
     
-    <input type="submit" value={"Calculate delivery costs"}/>
-    <p aria-label='deliveryFee' >Delivery fee: {deliveryFee} €</p>
+    <input className={styles.inputButton} type="submit" value={"Calculate delivery costs"}/>
   </form> 
+  <div className={styles.result}>
+    <h2 aria-label='deliveryFee' >Delivery fee: {deliveryFee} €</h2>
+  </div>
+  </>
   )
 }
 export default FormComponent

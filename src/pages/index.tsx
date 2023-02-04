@@ -16,10 +16,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-      <div>
-        <h1>Otsikko</h1>
-        <div className={styles.grid}>
-          <FormComponent/>
+      <div className={inter.className}>
+        <div className={styles.wrapper}>
+          <div>
+            <h1>Calculate your orders delivery cost.</h1>
+          </div>
+          <div className={styles.grid}>
+            <FormComponent/>
+          </div>
         </div>
       </div>
         
