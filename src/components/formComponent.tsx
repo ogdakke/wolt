@@ -9,9 +9,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 
 const FormComponent: React.FC = () => {
-  const [time, setTime] = useState(String)
   const [deliveryFee, setDeliveryFee] = useState(0)
-  const [inputData, setInputData] = useState([])
+  const [inputData, setInputData] = useState({})
   
   const date = new Date()
   
@@ -26,8 +25,11 @@ const FormComponent: React.FC = () => {
 
 const calculateDeliveryFee = (data: Inputs) => {
   const SaveData = (data: Inputs) => {
+    setInputData(data)
+    console.log(inputData);
     
   }
+  SaveData(data)
   
   // declare fee as a number
   let fee: number = 0;
@@ -124,7 +126,7 @@ return (
       step={0.01}
 
       {...register("cartValue", {required: true, min: 0.01})}/>
-      {errors.cartValue && <span>This field is required</span>}
+      {errors.cartValue && <span>Input valid cart value</span>}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -149,7 +151,7 @@ return (
       type="number"
       placeholder='Number of items' 
       {...register("numberOfItems", {valueAsNumber:true, required: true, min: 1})} />
-      {errors.numberOfItems && <span>Input a whole number of items.</span>}
+      {errors.numberOfItems && <span>Input a whole number of items</span>}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -161,7 +163,7 @@ return (
       type="date"    
       defaultValue={dateNow}
       {...register("date", {required: true})} />
-      {errors.date && <span>Input a valid date.</span>}
+      {errors.date && <span>Input a valid date</span>}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -173,7 +175,7 @@ return (
       type="time"    
       defaultValue={timeNow}
       {...register("time", {required: true})} />
-      {errors.time && <span>Input a delivery time.</span>}
+      {errors.time && <span>Input a valid delivery time</span>}
     </div>
     
     <button className={styles.inputButton} type="submit" value={"Calculate delivery costs"}>
