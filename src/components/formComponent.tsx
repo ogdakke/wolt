@@ -1,6 +1,6 @@
 import { Inter, Noto_Sans_Wancho } from '@next/font/google'
 import styles from "@/styles/Home.module.css"
-import {useForm, SubmitHandler, Control} from 'react-hook-form'
+import {useForm, SubmitHandler} from 'react-hook-form'
 import React, { useState} from 'react'
 import * as Label from '@radix-ui/react-label'
 import { isFriday, parseISO } from 'date-fns'
@@ -104,7 +104,7 @@ const hours = date.getHours().toString().padStart(2, '0')
 const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
 
-const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
+const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>()
 
 // On submit, call the calculateDeliveryFee function.
 const onSubmit: SubmitHandler<Inputs> = (data: Inputs) =>{
@@ -123,7 +123,7 @@ return (
       type="number"
       step={0.01}
 
-      {...register("cartValue", {required: true})}/>
+      {...register("cartValue", {required: true, min: 0.01})}/>
       {errors.cartValue && <span>This field is required</span>}
     </div>
 
@@ -148,8 +148,8 @@ return (
       aria-label='numberOfItems'
       type="number"
       placeholder='Number of items' 
-      {...register("numberOfItems", {required: true, min: 1})} />
-      {errors.numberOfItems && <span>Input a whole number of items.</span>}
+      {...register("numberOfItems", {valueAsNumber:true, required: true, min: 1})} />
+      {watch(errors.numberOfItems) && <span>Input a whole number of items.</span>}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -160,7 +160,7 @@ return (
       aria-label='dateInput'
       type="date"    
       defaultValue={dateNow}
-      {...register("date")} />
+      {...register("date", {required: true})} />
       {errors.date && <span>Input a valid date.</span>}
     </div>
 
@@ -172,11 +172,13 @@ return (
       aria-label='timeInput'
       type="time"    
       defaultValue={timeNow}
-      {...register("time")} />
+      {...register("time", {required: true})} />
       {errors.time && <span>Input a delivery time.</span>}
     </div>
     
-    <input className={styles.inputButton} type="submit" value={"Calculate delivery costs"}/>
+    <button className={styles.inputButton} type="submit" value={"Calculate delivery costs"}>
+      Calculate
+    </button>
   </form> 
   <div className={styles.result}>
     <h2 aria-label='deliveryFee' >Delivery fee: {deliveryFee} €</h2>

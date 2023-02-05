@@ -20,7 +20,7 @@ export default function Home() {
         <div className={styles.wrapper}>
         <div className={styles.header}>
           <a href="https://deweloper.fi" title='Link to my website'>
-          <img src="/favicon.svg" alt="logo" width="30"/>
+          <img src="/favicon.svg" alt="logo" width="36"/>
           </a>
             <h1>Calculate your orders delivery cost.</h1>
         </div>
