@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: 4rem;
+  padding-bottom: 4rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   width: 100vw;
@@ -110,7 +111,7 @@
   padding: 1rem 1.75rem;
   margin-top: 1rem;
   color: var(--foreground-rgb);
-  
+  cursor: pointer;
 
   border-radius: var(--border-radius);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
@@ -232,7 +233,7 @@
 
     padding-top: 1.5rem;
 
-    /* padding-bottom: 8rem; */
+    padding-bottom: 8rem;
   }
   
   .header {

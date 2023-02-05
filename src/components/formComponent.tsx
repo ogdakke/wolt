@@ -10,10 +10,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 const FormComponent: React.FC = () => {
   const [deliveryFee, setDeliveryFee] = useState(0)
-  const [inputData, setInputData] = useState({})
+  // const [inputData, setInputData] = useState<Inputs>()
   
   const date = new Date()
   
+  // declare the types of inputs
   interface Inputs {
     cartValue: number
     deliveryDistance: number
@@ -22,30 +23,29 @@ const FormComponent: React.FC = () => {
     time: Date
   }
 
-
-const calculateDeliveryFee = (data: Inputs) => {
-  const SaveData = (data: Inputs) => {
-    setInputData(data)
-    console.log(inputData);
-    
-  }
-  SaveData(data)
+/**
+ * calculates the delivery fee from user-inputted data
+ * @param {Inputs} data User inputted data from the form
+ * @returns {number} fee - value of delivery fee
+ */
+const calculateDeliveryFee = (data: Inputs): number => {
   
   // declare fee as a number
   let fee: number = 0;
+  // get the inputs
   const cartValue = data.cartValue
   const deliveryDistance = data.deliveryDistance
   const numberOfItems = data.numberOfItems
   // date from input
   const date = parseISO(data.date)
-  // get the current time in hh:mm:ss
+  // get the inputted hours from hh:mm by splitting before : 
   const hours = data.time.toString().split(":")[0]
 
   console.log(cartValue, "from calculatefunc");
   console.log(deliveryDistance, "from calculatefunc");
   console.log(numberOfItems, "from calculatefunc");
-  console.log(isFriday(date));
-  console.log(hours, "from asdjkas");
+  console.log("is it friday: ",isFriday(date));
+  console.log(hours, "from timeInput", data.time);
   
   
   // Calculate small order surcharge
@@ -59,8 +59,11 @@ const calculateDeliveryFee = (data: Inputs) => {
   if (deliveryDistance <= 1000) {
     fee += 2
   } else {
-    const additionalDistance = deliveryDistance - 1000
-    fee += 2 + Math.ceil(additionalDistance / 500) * 1
+    const additionalDistance = deliveryDistance - 1000;
+    const additionalFee = Math.ceil(additionalDistance / 500) * 1;
+    fee += additionalFee;
+
+    Math.max(fee, 3);
   }
 
   // Calculate item surcharge
@@ -74,7 +77,7 @@ const calculateDeliveryFee = (data: Inputs) => {
     fee += 1.2
   }
 
-  // Apply Friday rush fee if 
+  // Apply Friday rush fee if time is between 15:00 and 19:00
   const isFridayRush = parseInt(hours) >= 15 && parseInt(hours) < 19
   if (isFridayRush) {
     fee *= 1.2
@@ -88,12 +91,13 @@ const calculateDeliveryFee = (data: Inputs) => {
     fee = 0
   }
 
-  //  
+  //  precision function to make it return in format xx.xx
   const precise = (num: number) => {
     return parseFloat(num.toPrecision(4))
   }
-  precise(fee)
-    
+  
+  console.log(fee);
+  
   setDeliveryFee(precise(fee))
   return fee
 };
@@ -106,11 +110,12 @@ const hours = date.getHours().toString().padStart(2, '0')
 const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
 
-const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>()
+const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
 
 // On submit, call the calculateDeliveryFee function.
 const onSubmit: SubmitHandler<Inputs> = (data: Inputs) =>{
   calculateDeliveryFee(data)
+
 } 
 return (
   <>
