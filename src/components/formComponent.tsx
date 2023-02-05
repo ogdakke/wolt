@@ -149,7 +149,7 @@ return (
       type="number"
       placeholder='Number of items' 
       {...register("numberOfItems", {valueAsNumber:true, required: true, min: 1})} />
-      {watch(errors.numberOfItems) && <span>Input a whole number of items.</span>}
+      {errors.numberOfItems && <span>Input a whole number of items.</span>}
     </div>
 
     <div className={styles.inputWrapper}>
