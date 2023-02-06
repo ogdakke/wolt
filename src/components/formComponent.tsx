@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import { Inter} from '@next/font/google'
 import styles from "@/styles/Home.module.css"
 import {useForm, SubmitHandler} from 'react-hook-form'
@@ -22,6 +22,8 @@ const FormComponent: React.FC = () => {
 const [deliveryFee, setDeliveryFee] = useState(0)
 const [submitted, setSubmitted] = useState(false)
   
+
+
 // Here we get the current time and date for the ui on initial load. It gets overriden by the user inputting something else
 const date = new Date()
 // Date in yyyy-mm-dd format to match default "date" input format.
@@ -32,8 +34,9 @@ const hours = date.getHours().toString().padStart(2, '0')
 const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
 
+
 // register to get get values from form, formstate to handle errors, and handleSubmit to handle submitting
-const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<Inputs>({
+const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>({
   // set the default value of time to be timeNow. 
   defaultValues: {
       time: timeNow

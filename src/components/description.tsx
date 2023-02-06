@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "@/styles/Home.module.css"
 
-export default function description() {
+const description: React.FC = () => {
   return (
     <>
       <div className={styles.description}>
@@ -24,3 +24,4 @@ export default function description() {
     </>
   )
 }
+export default description
