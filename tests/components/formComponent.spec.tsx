@@ -1,57 +1,98 @@
-import * as React from "react";
 import "@testing-library/jest-dom"
-import {screen, render, fireEvent, } from '@testing-library/react'
+import {screen, render} from '@testing-library/react'
 import user from "@testing-library/user-event"
 
 import FormComponent, { calculateDeliveryFee } from "../../src/components/formComponent";
 
 describe('formComponent', () => {
-  
-
-
-  
-test('should render form with all the fields.', () => {
+    
+test('should render form with all the fields.', async () => {
   render(<FormComponent />)
-  const submitButton = screen.getByLabelText('Calculate')
 
   expect(
-    screen.getByLabelText("cartValue")
-  ).toBeInTheDocument()
+    await screen.findByLabelText("cartValue")
+  ).toBeVisible()
   expect(
-    screen.getByLabelText("deliveryDistance")
-  ).toBeInTheDocument()
+    await screen.findByLabelText("deliveryDistance")
+  ).toBeVisible()
   expect(
-    screen.getByLabelText("numberOfItems")
-  ).toBeInTheDocument()
+    await screen.findByLabelText("numberOfItems")
+  ).toBeVisible()
   expect(
-    screen.getByLabelText("dateInput")
-  ).toBeInTheDocument()
+    await screen.findByLabelText("dateInput")
+  ).toBeVisible()
   expect(
-    screen.getByLabelText("timeInput")
-  ).toBeInTheDocument()
+    await screen.findByLabelText("timeInput")
+  ).toBeVisible()
   expect(
-    submitButton
-  ).toBeInTheDocument()
+    await screen.findByLabelText('Calculate')
+  ).toBeVisible()
+  expect(
+    await screen.findByLabelText('Reset Values')
+  ).toBeVisible()
   
 })
 
-test('Should Calculate correct value for deliveryFee', () => {
+test('Should Calculate correct value for friday Rush', () => {
   // test for friday rush fee and surcharge fee
-  const data = { cartValue: 1,
+  const friday = {
+    cartValue: 1,
     date: new Date(2023, 1, 3),
     deliveryDistance: 3,
     numberOfItems: 4,
-    time: "18:30"}
-  expect(calculateDeliveryFee(data)).toBe(14.4)
+    time: "18:30"
+  }
+  expect(
+    calculateDeliveryFee(friday)
+  ).toStrictEqual<number>(14.4)  
+})
 
+test('should not apply any fees other than default', () => {  
   // test for no additional fees other than default deliveryFee
-  const data2 = {cartValue: 10, deliveryDistance: 999, numberOfItems: 4, date: new Date(2023, 2, 5), time: "08.00"}
-  expect(calculateDeliveryFee(data2)).toBe(2)
+  const feeTest = {
+  cartValue: 10, 
+  deliveryDistance: 999, 
+  numberOfItems: 4, 
+  date: new Date(2023, 2, 5), 
+  time: "08.00"}
+  expect(
+  calculateDeliveryFee(feeTest)
+  ).toStrictEqual<number>(2)
+})
 
+test('Delivery Fee should be 0 for orders over 100 €', () => { 
   // test for over 100€ cart value
+  const largeAmount = {
+    cartValue: 123,
+    date: new Date(2023, 2, 4),
+    deliveryDistance: 1000,
+    numberOfItems: 4,
+    time: "18:30"
+  }
+  expect(
+    calculateDeliveryFee(largeAmount)
+  ).toStrictEqual<number>(0)
   
-  // test for delivery fee never going above 15
+ })
 
+
+test('Delivery fee should never surpass 15', () => {
+  // test for delivery fee never going above 15
+  const overFifteen = {
+    cartValue: 10,
+    date: new Date(2009, 6, 27),
+    deliveryDistance: 10000,
+    numberOfItems: 40,
+    time: "11:31"
+  }
+  expect(
+    calculateDeliveryFee(overFifteen)
+  ).toStrictEqual<number>(15)
+
+})
+
+
+test('Edge cases in deliveryDistance', () => {
   // test for edge cases in delivery distance. for ex. 1000, 1001, 1501, 2499 etc...
   // also negative numbers
   const distances = [1000, 1001, 1499, 1500, 1501, 2999, 4006, 8472, 0, -19, 0.000001]
@@ -64,9 +105,8 @@ test('Should Calculate correct value for deliveryFee', () => {
     time: "18:30"
   }))
   
-  expect(values).toStrictEqual([2,3,3,3,4,6,9,15,2,2,2])
+    expect(values).toStrictEqual<Array<number>>([2,3,3,3,4,6,9,15,2,2,2])
   })
-
 })
 
 

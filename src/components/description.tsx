@@ -1,10 +1,11 @@
 import React from "react"
 import styles from "@/styles/Home.module.css"
 import Image from "next/image"
-const description: React.FC = () => {
+
+const Description: React.FC = () => {
   return (
     <>
-      <div className={styles.description}>
+      <div aria-label="description" className={styles.description}>
         <h2>
           Hi there,
         </h2>
@@ -16,7 +17,7 @@ const description: React.FC = () => {
           Thanks for checking this out, and while you are here, visit my website:
         </p>
           <div className={styles.imageWrapper}>
-          <Image src="/favicon.svg" alt="" width={20} height={20} 
+          <Image className={styles.svgImage} src="/favicon.svg" alt="Logo" width={20} height={20} 
           />
           <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
             deweloper.fi</a> 
@@ -25,4 +26,4 @@ const description: React.FC = () => {
     </>
   )
 }
-export default description
+export default Description

@@ -35,13 +35,10 @@
   color: rgba(var(--foreground-rgb),0.7);
   text-decoration: underline dotted;
   padding: 0.5rem 0rem;
-  z-index: 6;
+  padding-right: 1rem;
 }
 
-.description a:hover {
-  color: rgba(var(--foreground-rgb), 0.9);
 
-}
 
 .description p {
   margin: 0;  
@@ -53,7 +50,17 @@
   align-items: center;
   gap: 0.5rem;
   margin: 0.5rem 0rem;
+
+  
 }
+
+
+.svgImage{
+  transition: filter 250ms;
+  filter: blur(3px)
+}
+
+
 
 .header,
 .header a {
@@ -139,13 +146,8 @@
 .buttonWrapper button[type=button] {
   background-color: rgba(180, 0,10, 1);
 }
-.buttonWrapper button[type=button]:hover {
-  background-color: rgba(205, 0,1, 0.8);
-}
 
-.inputButton:hover {
-  background-color: rgba(var(--callout-rgb), 1);
-}
+
 
 .inputWrapper {
   display: flex;
@@ -175,10 +177,7 @@
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
   transition: all 200ms, border 200ms;
 }
-.card:hover {
-  background: rgba(var(--card-rgb), 0.1);
-  border: 1px solid rgba(var(--card-border-rgb), 0.15);
-}
+
 
 .card span {
   display: inline-block;
@@ -190,9 +189,7 @@
   color: rgba(var(--foreground-rgb), 0.6);
   font-weight: 500;
 }
-.card:hover h2 {
-  color: rgba(var(--foreground-rgb), 0.9);
-}
+
 
 .card p {
   margin: 0;
@@ -202,10 +199,27 @@
   max-width: 30ch;
 }
 
+.resultWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.result {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
 .unsubmitted {
   transition: all 650ms;
   filter: blur(6px);
+
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select:none;
 }
+
 
 .submitted {
   transition: all 650ms;
@@ -219,7 +233,30 @@
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    background: rgba(var(--card-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+
+  }
+  .card:hover h2 {
+    color: rgba(var(--foreground-rgb), 0.9);
+  }
+
+  .description a:hover {
+    color: rgba(var(--foreground-rgb), 0.9);
   
+  }
+  .inputButton:hover {
+    background-color: rgba(var(--callout-rgb), 1);
+  }
+  .buttonWrapper button[type=button]:hover {
+    background-color: rgba(205, 0,1, 0.8);
+  }
+  
+  .imageWrapper:hover .svgImage {
+    transition: filter 250ms;
+    filter: blur(0);
+  }
 
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect} from 'react'
-import dynamic from 'next/dynamic'
 
 import { Inter} from '@next/font/google'
 import styles from "@/styles/Home.module.css"
@@ -21,12 +20,9 @@ export interface Inputs {
 
 const FormComponent: React.FC = () => {
 
+// set the state for the fee and submitted for conditional rendering
 const [deliveryFee, setDeliveryFee] = useState(0)
 const [submitted, setSubmitted] = useState(false)
-
-
-
-  
 
 
 // Here we get the current time and date for the ui on initial load. It gets overriden by the user inputting something else
@@ -46,7 +42,7 @@ const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>
   defaultValues: {
       time: timeNow
   },
-  // mode: "onChange"
+  mode: "onChange"
 })
 
 
@@ -150,12 +146,16 @@ return (
         Reset
       </button>
     </div>
+
+    <div className={styles.resultWrapper}>
+    <p className={styles.result}>Result:</p>
     <div className={styles.card}>
       {submitted ? 
       <h2 className={styles.submitted} aria-label='deliveryFee' >Delivery fee: <span>{deliveryFee}</span> €</h2>
       : <h2 className={styles.unsubmitted} aria-label='deliveryFee' >
         Delivery fee: <span>{deliveryFee}</span> €
         </h2>}
+    </div>
     </div>
   </form> 
   </>
