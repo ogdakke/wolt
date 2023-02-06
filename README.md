@@ -5,8 +5,12 @@ unzip the file to your preferred folder
 go to the root directory "wolt-main" and run 
 ```bash
 npm install
+# or
+yarn install
+# or
+pnpm install
 ```
-wait for the modules to install
+wait for the dependencies to install
 
 after that run the development server:
 
