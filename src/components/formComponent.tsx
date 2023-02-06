@@ -20,6 +20,7 @@ export interface Inputs {
 const FormComponent: React.FC = () => {
   
 const [deliveryFee, setDeliveryFee] = useState(0)
+const [submitted, setSubmitted] = useState(false)
   
 // Here we get the current time and date for the ui on initial load. It gets overriden by the user inputting something else
 const date = new Date()
@@ -32,7 +33,7 @@ const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
 
 // register to get get values from form, formstate to handle errors, and handleSubmit to handle submitting
-const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<Inputs>({
   // set the default value of time to be timeNow. 
   defaultValues: {
       time: timeNow
@@ -40,12 +41,20 @@ const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
   // mode: "onChange"
 })
 
+
+
+
 // On submit, call the calculateDeliveryFee function.
 const onSubmit: SubmitHandler<Inputs> = (data: Inputs) =>{
-  setDeliveryFee(calculateDeliveryFee(data))  
+  setSubmitted(true)
+  console.log("submitted", submitted);
+  
+  setDeliveryFee(calculateDeliveryFee(data))
+
 } 
 return (
   <>
+  {/* The main form element, which when submitted will call handlesubmit */}
   <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
     <div className={styles.inputWrapper}>
       <Label.Root className={styles.LabelRoot}  htmlFor="cartValue">
@@ -54,13 +63,15 @@ return (
       <input  className={inter.className}
       aria-label='cartValue'
       placeholder='eg. 10.50'
+      // use "number", to allow decimals
       type="number"
       step={0.01}
-
+      // register each form input element and validate them.
       {...register("cartValue", 
         {valueAsNumber:true, required: true, min: 0.01, validate: (value) => value >= 0.01})
       }/>
-      {errors.cartValue && <span>Input valid cart value</span>}
+    {/* errors will return true when field validation fails  */}
+      {errors.cartValue ? <span>Input valid cart value</span> : null}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -69,15 +80,14 @@ return (
       </Label.Root>
       <input  className={inter.className}
       aria-label='deliveryDistance'
+      // use "tel" to get numpad on mobile
       type="tel"
-      step={1}
       placeholder='for example: 1203'
       {...register("deliveryDistance", 
         {valueAsNumber: true, required: true, min: 1, validate: (value) => value > 0})
       } />
-      {errors.deliveryDistance && <span>Enter distance of delivery</span>}
+      {errors.deliveryDistance ? <span>Enter distance of delivery</span> : null}
     </div>
-    {/* errors will return when field validation fails  */}
 
     <div className={styles.inputWrapper}>
       <Label.Root className={styles.LabelRoot} htmlFor="numberOfItems">
@@ -90,7 +100,7 @@ return (
       {...register("numberOfItems", 
         {valueAsNumber:true, required: true, min: 1, validate: (value) => value >= 1})
       } />
-      {errors.numberOfItems && <span>Input a whole number of items</span>}
+      {errors.numberOfItems ? <span>Input a whole number of items</span> : null}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -102,7 +112,7 @@ return (
       aria-label='dateInput'
       type="date"    
       {...register("date", {valueAsDate: true, required: true})} />
-      {errors.date && <span>Input a valid date</span>}
+      {errors.date ? <span>Input a valid date</span> : null}
     </div>
 
     <div className={styles.inputWrapper}>
@@ -112,18 +122,34 @@ return (
       <input className={inter.className}
       aria-label='timeInput'
       type="time"    
-      // defaultValue={timeNow}
       {...register("time", {required: true})} />
-      {errors.time && <span>Input a valid delivery time</span>}
+      {errors.time ? <span>Input a valid delivery time</span> : null}
     </div>
     
-    <button aria-label='Calculate' className={styles.inputButton} type="submit">
-      Calculate
-    </button>
+    <div className={styles.buttonWrapper}> 
+      <button aria-label='Calculate' className={styles.inputButton} 
+      type="submit">
+        Calculate
+      </button>
+      <button
+        aria-label='Reset Values'
+        className={styles.inputButton}
+        type='button'
+        onClick={() => {
+          reset()
+          setSubmitted(false)
+          }}>
+        Reset
+      </button>
+    </div>
+    <div className={styles.card}>
+      {submitted ? 
+      <h2 className={styles.submitted} aria-label='deliveryFee' >Delivery fee: <span>{deliveryFee}</span> €</h2>
+      : <h2 className={styles.unsubmitted} aria-label='deliveryFee' >
+        Delivery fee: <span>{deliveryFee}</span> €
+        </h2>}
+    </div>
   </form> 
-  <div className={styles.result}>
-    <h2 aria-label='deliveryFee' >Delivery fee: {deliveryFee} €</h2>
-  </div>
   </>
   )
 }

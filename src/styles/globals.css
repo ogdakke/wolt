@@ -49,12 +49,12 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 10, 10, 10;
 
-    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
+    --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
       to bottom right,
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0.3)
+      rgba(40, 121, 20, 0),
+      rgba(1, 255, 107, 0),
+      rgba(134, 143, 138, 0.02)
     );
 
     --tile-start-rgb: 2, 13, 46;
@@ -95,7 +95,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 @media (prefers-color-scheme: dark) {

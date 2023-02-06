@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import FormComponent from '../components/formComponent'
+import Description from '@/components/description'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function Home() {
         </div>
           <div className={styles.grid}>
             <FormComponent/>
+            <Description/>
           </div>
         </div>
       </div>
