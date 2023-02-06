@@ -20,7 +20,7 @@ const FormComponent: React.FC = () => {
     deliveryDistance: number
     numberOfItems: number
     date: string
-    time: Date
+    time: string
   }
 
 /**
@@ -34,12 +34,13 @@ const calculateDeliveryFee = (data: Inputs): number => {
   let fee: number = 0;
   // get the inputs
   const cartValue = data.cartValue
-  const deliveryDistance = data.deliveryDistance
+  // Round delivery distance down - This is because while decimal inputs are possible, it makes no sense to handle them as decimals.
+  const deliveryDistance = Math.floor(data.deliveryDistance)
   const numberOfItems = data.numberOfItems
   // date from input
   const date = parseISO(data.date)
   // get the inputted hours from hh:mm by splitting before : 
-  const hours = data.time.toString().split(":")[0]
+  const hours = data.time.split(":")[0]
 
   console.log(cartValue, "from calculatefunc");
   console.log(deliveryDistance, "from calculatefunc");
@@ -56,8 +57,8 @@ const calculateDeliveryFee = (data: Inputs): number => {
   }
 
   // Calculate delivery distance fee
-  if (deliveryDistance <= 1000) {
-    fee += 2
+  fee += 2
+  if (deliveryDistance > 1000) {
   } else {
     const additionalDistance = deliveryDistance - 1000;
     const additionalFee = Math.ceil(additionalDistance / 500) * 1;
@@ -110,7 +111,14 @@ const hours = date.getHours().toString().padStart(2, '0')
 const minutes = date.getMinutes().toString().padStart(2, '0')
 const timeNow = `${hours}:${minutes}`
 
-const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
+
+const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  defaultValues: {
+    date: dateNow,
+    time: timeNow
+  },
+  mode: "onChange"
+})
 
 // On submit, call the calculateDeliveryFee function.
 const onSubmit: SubmitHandler<Inputs> = (data: Inputs) =>{
@@ -127,10 +135,12 @@ return (
       <input  className={inter.className}
       aria-label='cartValue'
       placeholder='eg. 10.50'
-      type="number"
+      type="tel"
       step={0.01}
 
-      {...register("cartValue", {required: true, min: 0.01})}/>
+      {...register("cartValue", 
+        {valueAsNumber:true, required: true, min: 0.01, validate: (value) => value >= 0.01})
+      }/>
       {errors.cartValue && <span>Input valid cart value</span>}
     </div>
 
@@ -140,9 +150,12 @@ return (
       </Label.Root>
       <input  className={inter.className}
       aria-label='deliveryDistance'
-      type="number"
+      type="tel"
+      step={1}
       placeholder='for example: 1203'
-      {...register("deliveryDistance", { required: true, min: 1 })} />
+      {...register("deliveryDistance", 
+        {required: true, min: 1, validate: (value) => value > 0})
+      } />
       {errors.deliveryDistance && <span>Enter distance of delivery</span>}
     </div>
     {/* errors will return when field validation fails  */}
@@ -155,7 +168,9 @@ return (
       aria-label='numberOfItems'
       type="number"
       placeholder='Number of items' 
-      {...register("numberOfItems", {valueAsNumber:true, required: true, min: 1})} />
+      {...register("numberOfItems", 
+        {valueAsNumber:true, required: true, min: 1, validate: (value) => value >= 1})
+      } />
       {errors.numberOfItems && <span>Input a whole number of items</span>}
     </div>
 
@@ -166,7 +181,7 @@ return (
       <input className={inter.className}
       aria-label='dateInput'
       type="date"    
-      defaultValue={dateNow}
+      // defaultValue={dateNow}
       {...register("date", {required: true})} />
       {errors.date && <span>Input a valid date</span>}
     </div>
@@ -178,7 +193,7 @@ return (
       <input className={inter.className}
       aria-label='timeInput'
       type="time"    
-      defaultValue={timeNow}
+      // defaultValue={timeNow}
       {...register("time", {required: true})} />
       {errors.time && <span>Input a valid delivery time</span>}
     </div>
