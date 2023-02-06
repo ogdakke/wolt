@@ -56,16 +56,12 @@ const calculateDeliveryFee = (data: Inputs): number => {
     console.log(fee);   
   }
 
-  // Calculate delivery distance fee
+  // add the default delivery cost of 2€
   fee += 2
+  // Calculate delivery distance fee
   if (deliveryDistance > 1000) {
-  } else {
-    const additionalDistance = deliveryDistance - 1000;
-    const additionalFee = Math.ceil(additionalDistance / 500) * 1;
-    fee += additionalFee;
-
-    Math.max(fee, 3);
-  }
+    
+  } 
 
   // Calculate item surcharge
   if (numberOfItems >= 5) {
@@ -154,7 +150,7 @@ return (
       step={1}
       placeholder='for example: 1203'
       {...register("deliveryDistance", 
-        {required: true, min: 1, validate: (value) => value > 0})
+        {valueAsNumber: true, required: true, min: 1, validate: (value) => value > 0})
       } />
       {errors.deliveryDistance && <span>Enter distance of delivery</span>}
     </div>
@@ -166,7 +162,7 @@ return (
       </Label.Root>
       <input className={inter.className}
       aria-label='numberOfItems'
-      type="number"
+      type="tel"
       placeholder='Number of items' 
       {...register("numberOfItems", 
         {valueAsNumber:true, required: true, min: 1, validate: (value) => value >= 1})
@@ -182,7 +178,7 @@ return (
       aria-label='dateInput'
       type="date"    
       // defaultValue={dateNow}
-      {...register("date", {required: true})} />
+      {...register("date", {valueAsDate: true, required: true})} />
       {errors.date && <span>Input a valid date</span>}
     </div>
 
