@@ -1,4 +1,9 @@
 # This app calculates a delivery fee
+Visit the live website to get the best experience:
+
+[`Link to website`](https://wolt-taupe.vercel.app/)
+
+or
 ## Run the server
 unzip the file to your preferred folder
 
