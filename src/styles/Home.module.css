@@ -30,13 +30,11 @@
 }
 
 .description a {
-  display: flex;
-  width: min-content;
-  gap: 0.5rem;
+  
   align-items: center;
   color: rgba(var(--foreground-rgb),0.7);
   text-decoration: underline dotted;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0rem;
   z-index: 6;
 }
 
@@ -50,6 +48,10 @@
 }
 
 .imageWrapper {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0.5rem 0rem;
 }
 

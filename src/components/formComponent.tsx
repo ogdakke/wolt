@@ -1,12 +1,14 @@
 import React, { useState, useEffect} from 'react'
+import dynamic from 'next/dynamic'
+
 import { Inter} from '@next/font/google'
 import styles from "@/styles/Home.module.css"
-import {useForm, SubmitHandler} from 'react-hook-form'
 import * as Label from '@radix-ui/react-label'
-import { format, isFriday, parseISO } from 'date-fns'
+
+import { isFriday} from 'date-fns'
+import {useForm, SubmitHandler} from 'react-hook-form'
 
 const inter = Inter({ subsets: ['latin'] })
-
 // declare the types of inputs
 export interface Inputs {
   cartValue: number
@@ -18,9 +20,12 @@ export interface Inputs {
 
 
 const FormComponent: React.FC = () => {
-  
+
 const [deliveryFee, setDeliveryFee] = useState(0)
 const [submitted, setSubmitted] = useState(false)
+
+
+
   
 
 
