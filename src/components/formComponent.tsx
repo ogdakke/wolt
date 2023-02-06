@@ -194,7 +194,6 @@ export const calculateDeliveryFee = (data: Inputs): number => {
     }
   } 
 
-
   // Calculate item surcharge
   if (numberOfItems >= 5) {
     const itemSurcharge = (numberOfItems - 4) * 0.5
@@ -225,9 +224,7 @@ export const calculateDeliveryFee = (data: Inputs): number => {
     return parseFloat(num.toPrecision(4))
   }
   
-  
   return precise(fee)
 }
-
 
 export default FormComponent 
